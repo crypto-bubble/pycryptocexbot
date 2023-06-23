@@ -72,27 +72,7 @@ if running multiple bots and keeping track of their progress.
     % cd pycryptobot
     % python3 -m pip install -r requirements.txt
 
-### Container
 
-    Install Docker Desktop
-    https://docs.docker.com/desktop
-
-From Github image repo
-
-    % docker pull ghcr.io/whittlem/pycryptobot/pycryptobot:latest
-    latest: Pulling from whittlem/pycryptobot/pycryptobot
-    8f403cb21126: Pull complete
-    65c0f2178ac8: Pull complete
-    1091bd628216: Pull complete
-    cb1eb04426a4: Pull complete
-    ec065b94ad1c: Pull complete
-    Digest: sha256:031fd6c7b7b2d08a743127e5850bc3d9c97a46e02ed0878f4445012eaf0619d3
-    Status: Downloaded newer image for ghcr.io/whittlem/pycryptobot/pycryptobot:latest
-    ghcr.io/whittlem/pycryptobot/pycryptobot:latest
-
-Local repo
-
-    % docker build -t pycryptobot .
 
 ## Additional Information
 
@@ -104,107 +84,7 @@ The "requirements.txt" was created with `python3 -m pip freeze`
 
     % python3 pycryptobot.py <arguments>
 
-### Docker (Option 1)
-
-    Example Local Absolute Path: /home/example/config.json
-    Example Market: BTC-GBP
-
-    Daemon:
-    % docker run --name BTC-GBP -v /home/example/config.json:/app/config.json -d ghcr.io/whittlem/pycryptobot/pycryptobot:latest <arguments>
-
-    Example:
-    % docker run --name BTC-GBP -v /Users/whittlem/Documents/Repos/Docker/config.json:/app/config.json -d ghcr.io/whittlem/pycryptobot/pycryptobot:latest --live 0
-    e491ae4fdba28aa9e74802895adf5e856006c3c63cf854c657482a6562a1e15
-
-    Interactive:
-    % docker run --name BTC-GBP -v /home/example/config.json:/app/config.json -it ghcr.io/whittlem/pycryptobot/pycryptobot:latest <arguments>
-
-    List Processes:
-    % docker ps
-
-    Example:
-    % docker ps
-    CONTAINER ID   IMAGE                                             COMMAND                  CREATED          STATUS          PORTS     NAMES
-    e491ae4fdba2   ghcr.io/whittlem/pycryptobot/pycryptobot:latest   "python3 pycryptobot…"   46 seconds ago   Up 44 seconds             BTC-GBP
-
-    Container Shell:
-    % docker exec -it BTC-GBP /bin/bash
-    [root@e491ae4fdba2 app]#
-
-    Build your own image (if necessary):
-    docker build -t pycryptobot_BTC-GBP .
-
-    Running the docker image:
-    docker run -d --rm --name pycryptobot_BTC-GBP_container pycryptobot_BTC-GBP
-
-Typically I would save all my settings in the config.json but running from the command line I would usually run it like this.
-
-    % python3 pycryptobot.py --market BTC-GBP --granularity 3600 --live 1 --verbose 0 --selllowerpcnt -2
-
-### docker-compose (Option 2)
-
-To run using the config.json in template folder,
-
-    % docker-compose up -d
-
-By default, docker-compose will use the config inside `./market/template`. We provide this as a template for any market config.
-
-For each market you want to trade, create a copy of this folder under market.
-Also create either a coinbase.key or binance.key file to each folder depending which trading platform is being used.
-For example, if you are trading `BTCEUR` and `ETHEUR` your market folder should look like this:
-
-    ├── market
-    │ ├── BTCEUR
-    │ │ ├── config.json
-    │ │ ├── pycryptobot.log
-    │ │ └── graphs
-    │ └── ETHEUR
-    │   ├── config.json
-    │   ├── pycryptobot.log
-    │   └── graphs
-
-modify docker-compose.yaml
-
-    version: "3.9"
-
-    services:
-      btceur:
-        build:
-          context: .
-        container_name: btceur
-        volumes:
-          - ./market/BTCEUR/coinbase.key:/app/coinbase.key.json
-          - ./market/BTCEUR/config.json:/app/config.json
-          - ./market/BTCEUR/pycryptobot.log:/app/pycryptobot.log
-          - ./market/BTCEUR/graphs:/app/graphs
-          - /etc/localtime:/etc/localtime:ro
-        environment:
-          - PYTHONUNBUFFERED=1
-        deploy:
-          restart_policy:
-            condition: on-failure
-
-      etheur:
-        build:
-          context: .
-        container_name: etheur
-        volumes:
-          - ./market/ETHEUR/coinbase.key:/app/coinbase.key.json
-          - ./market/ETHEUR/config.json:/app/config.json
-          - ./market/ETHEUR/pycryptobot.log:/app/pycryptobot.log
-          - ./market/ETHEUR/graphs:/app/graphs
-          - /etc/localtime:/etc/localtime:ro
-        environment:
-          - PYTHONUNBUFFERED=1
-        deploy:
-          restart_policy:
-            condition: on-failure
-
-Run all your bots. Note that each market should have it's own config. Graphs will be saved on each market's folder.
-
-    % docker-compose up -d
-
-### Kubernetes (Helm) (Option 3)
+### Kubernetes (Helm) 
 
 There is a helm chart available in this repo. It will create your config.json as a configmap and the binance/coinbase keys as secrets, and mount them into the Pod.
 To run pycryptobot as a Kubernetes deployment, create your helm values as yaml in the following format (do not change the path to the api_key_file):
