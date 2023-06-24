@@ -1,6 +1,3 @@
-[![Docker](https://github.com/whittlem/pycryptobot/actions/workflows/container.yml/badge.svg)](https://github.com/whittlem/pycryptobot/actions/workflows/container.yml/badge.svg) [![Tests](https://github.com/whittlem/pycryptobot/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/whittlem/pycryptobot/actions/workflows/unit-tests.yml/badge.svg)
-
-
 # Python Crypto Bot v5.0.1 (pycryptobot)
 
 ## Join our chat on Telegram
@@ -39,14 +36,6 @@ TradingView.com Charts ❤
 
 <https://levelup.gitconnected.com/tradingview-com-charts-36a49c9f77ea>
 
-## Optional Add-on
-
-Coinbase Pro Portfolio Tracker
-
-<https://github.com/whittlem/coinbaseprotracker>
-
-An all-in-one view of all your Coinbase Pro portfolios. Highly recommended
-if running multiple bots and keeping track of their progress.
 
 ## Prerequisites
 
@@ -70,170 +59,14 @@ if running multiple bots and keeping track of their progress.
 
     % git clone https://github.com/whittlem/pycryptobot
     % cd pycryptobot
-    % python3 -m pip install -r requirements.txt
+    % python3 -m pip install -r requirements-mac.txt
 
-
-
-## Additional Information
-
-The "requirements.txt" was created with `python3 -m pip freeze`
 
 ## Run it
 
 ### Manual
 
-    % python3 pycryptobot.py <arguments>
-
-### Kubernetes (Helm) 
-
-There is a helm chart available in this repo. It will create your config.json as a configmap and the binance/coinbase keys as secrets, and mount them into the Pod.
-To run pycryptobot as a Kubernetes deployment, create your helm values as yaml in the following format (do not change the path to the api_key_file):
-
-    config: >
-        {
-            "coinbasepro": {
-                "api_url": "https://api.pro.coinbase.com",
-                "config": {
-                    "base_currency": "ETH",
-                    "quote_currency": "EUR",
-                    "live": 1,
-                    "sellatloss": 0,
-                    "disablelog": 1,
-                    "autorestart": 1
-                },
-                "api_key_file": "/app/keys/coinbasepro.key"
-            },
-            "telegram" : {
-                "token" : "<telegram_token>",
-                "client_id" : "<client_id>",
-            }
-        }
-
-    coinbasepro_key: |
-        XXXXXXXXXXXXXXXXXXXX
-        YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
-        zzzzzzzzzzzz
-
-Or, for binance:
-
-    config: >
-        {
-            "binance": {
-                "api_url": "https://api.binance.com",
-                "config": {
-                    "base_currency": "ETH",
-                    "quote_currency": "EUR",
-                    "live": 1,
-                    "sellatloss": 0,
-                    "disablelog": 1,
-                    "autorestart": 1
-                },
-                "api_key_file": "/app/keys/binance.key"
-            },
-            "telegram" : {
-                "token" : "<telegram_token>",
-                "client_id" : "<client_id>",
-            }
-        }
-
-    binance_key: |
-        XXXXXXXXXXXXXXXXXXXX
-        YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
-
-Or, for kucoin:
-
-    config: >
-        {
-            "kucoin": {
-                "api_url": "https://api.kucoin.com",
-                "config": {
-                    "base_currency": "ETH",
-                    "quote_currency": "EUR",
-                    "live": 1,
-                    "sellatloss": 0,
-                    "disablelog": 1,
-                    "autorestart": 1
-                },
-                "api_key_file": "/app/keys/coinbasepro.key"
-            },
-            "telegram" : {
-                "token" : "<telegram_token>",
-                "client_id" : "<client_id>",
-            }
-        }
-
-    kucoin_key: |
-        XXXXXXXXXXXXXXXXXXXX
-        YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
-        zzzzzzzzzzzz
-
-Or both:
-
-    config: >
-        {
-            "coinbasepro": {
-                "api_url": "https://api.pro.coinbase.com",
-                "config": {
-                    "base_currency": "ETH",
-                    "quote_currency": "EUR",
-                    "live": 1,
-                    "sellatloss": 0,
-                    "disablelog": 1,
-                    "autorestart": 1
-                },
-                "api_key_file": "/app/keys/coinbasepro.key"
-            },
-            "binance": {
-                "api_url": "https://api.binance.com",
-                "config": {
-                    "base_currency": "ETH",
-                    "quote_currency": "EUR",
-                    "live": 1,
-                    "sellatloss": 0,
-                    "disablelog": 1,
-                    "autorestart": 1
-                },
-                "api_key_file": "/app/keys/binance.key"
-            },
-            "kucoin": {
-                "api_url": "https://api.kucoin.com",
-                "config": {
-                    "base_currency": "ETH",
-                    "quote_currency": "EUR",
-                    "live": 1,
-                    "sellatloss": 0,
-                    "disablelog": 1,
-                    "autorestart": 1
-                },
-                "api_key_file": "/app/keys/kucoin.key"
-            },
-            "telegram" : {
-                "token" : "<telegram_token>",
-                "client_id" : "<client_id>",
-            }
-        }
-
-    coinbasepro_key: |
-        XXXXXXXXXXXXXXXXXXXX
-        YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
-        zzzzzzzzzzzz
-    binance_key: |
-        XXXXXXXXXXXXXXXXXXXX
-        YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
-    kucoin_key: |
-        XXXXXXXXXXXXXXXXXXXX
-        YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
-        zzzzzzzzzzzz
-
-Then run:
-
-    git clone https://github.com/whittlem/pycryptobot
-    cd pycryptobot/chart
-    helm upgrade -i pycryptobot-eth-eur -f <path_to_helm_config>
-
-So if you created above helm values file as config-eth-eur.yaml, you would run:
-
-    helm upgrade -i pycryptobot-eth-eur -f config-eth-eur.yaml
+    % python3 websvc.py
 
 ## Bot mechanics
 

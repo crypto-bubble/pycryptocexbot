@@ -8,8 +8,7 @@ import argparse
 import webbrowser
 from threading import Timer
 from websvc.app import app
-
-parser = argparse.ArgumentParser(description="PyCryptoBot Web Portal")
+parser = argparse.ArgumentParser(description="Coin Trading Web Portal")
 parser.add_argument(
     "--host",
     type=str,
@@ -20,6 +19,7 @@ parser.add_argument(
     type=int,
     help="web service port (default: 5000)",
 )
+
 parser.add_argument("--quiet", action="store_true", help="don't open browser")
 parser.add_argument("--debug", action="store_true", help="enable debugging")
 
@@ -52,4 +52,6 @@ if __name__ == "__main__":
         Timer(1, open_browser).start()
 
     port = int(os.environ.get("PORT", http_port))
-    app.run(host=http_host, port=port, debug=args.debug)
+
+    # p yright: reportUndefinedVariable=false
+    app.run(host=http_host, port=port, debug=args.debug)  # noqa: F821
